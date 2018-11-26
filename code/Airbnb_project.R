@@ -1,8 +1,13 @@
-setwd("./AirBnB_Project")
+setwd(("/Users/apurvprakash/Desktop/SDSU_MSIS2017/MIS 620/Group Project/Airbnb_Dataset"))
 
 
 #Loading All Required Libraries
 library(ggplot2)
+library(plyr)
+library(gridBase)
+library(grid)
+library(gridExtra)
+library(lattice)
 
 
 
@@ -121,6 +126,70 @@ train_data[is.nan(train_data$age),]
 #-------------------------------
 # Data Exploration
 #--------------------------------
+
+# 8. Signup_Method
+unique(train_data$signup_method)
+summary(train_data$signup_method)
+count(train_data$signup_method, vars = NULL)
+
+#frequency plot of signup_method
+qplot(x = signup_method, data = train_data)
+
+# frequenct plot for each destination country of signup_method- Without US
+ggplot(subset(train_data, country_destination != "NDF" & country_destination != "US"  & signup_method == "facebook"), aes(x = signup_method)) +
+  geom_bar()+
+  facet_wrap(~country_destination)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# #frequenct plot for each destination country of signup_method- With US
+ggplot(subset(train_data, country_destination != "NDF" & signup_method == "facebook"), aes(x = signup_method)) +
+  geom_bar()+
+  facet_wrap(~country_destination)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# 9. Sign_up Flow
+unique(train_data$signup_flow)
+summary(train_data$signup_flow)
+count(train_data$signup_flow, vars = NULL)
+
+# 10. Language
+unique(train_data$language)
+summary(train_data$language)
+
+ # language across the users that did not ever make a reservation through Airbnb
+train_data <- within(train_data, language <- factor(language, 
+                                    levels=names(sort(table(language),
+                                                      decreasing=TRUE))))
+ # With English
+wEng <- ggplot(subset(train_data, country_destination == "NDF"), 
+               aes(language)) +
+  geom_bar(aes(fill = gender)) +
+  ggtitle("Frequency distribution - NDF, All Languages")
+
+ # Without English
+woEng <- ggplot(subset(train_data, country_destination == "NDF" & language != "en"), 
+                 aes(language)) +
+  geom_bar(aes(fill = gender)) +
+  ggtitle("Frequency Distribution - NDF, W/o English")
+
+grid.arrange(wEng, woEng, ncol = 1)
+
+ # language across the users who made a reservation through Airbnb
+
+ # With English
+wEng <- ggplot(subset(train_data, country_destination != "NDF"), 
+               aes(language)) +
+  geom_bar(aes(fill = gender)) +
+  ggtitle("Frequency distribution - Reservations, All Languages")
+
+ # Without English
+
+woEng <- ggplot(subset(train_data, country_destination != "NDF" & language != "en"), 
+                 aes(language)) +
+  geom_bar(aes(fill = gender)) +
+  ggtitle("Frequency Distribution - Reservations, W/o English")
+
+grid.arrange(wEng, woEng, ncol = 1)
 
 # 11. SIGNUP_APP
 
