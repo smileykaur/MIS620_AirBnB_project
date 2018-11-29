@@ -126,7 +126,45 @@ train_data[is.nan(train_data$age),]
 #-------------------------------
 # Data Exploration
 #--------------------------------
+# 1. Age
+# To see if there exists any outliers 
+boxplot(train_data$age)
+#To check if outliers exist in all the gender cases.
+qplot(x = gender, y = age, data = train_data, 
+      geom = "boxplot") 
+#Age by destination country
+ggplot(train_data, aes(country_destination, age)) +
+  geom_boxplot(aes()) + ylim(25,50)
 
+ggplot(train_data, aes(age)) +
+  geom_histogram(binwidth = 1, color = 'black', fill = '#099DD9') +
+  geom_histogram(data=subset(train_data,age==20), color = "black", fill="red", binwidth = 1) +
+  scale_x_continuous(limits = c(15, 25), breaks = seq(15, 25, 1)) +
+  facet_wrap(~country_destination, ncol = 3, scales = "free")
+                            
+# 2. Gender
+ggplot(train_data, aes(x = gender)) + geom_bar()
+
+# 3. Date first Booking
+# Converting to Date Format
+train_data$date_first_booking <- as.character(train_data$date_first_booking)
+# copying the values of date_account_created to the column with date_first_booking
+train_data$date_account_created <- as.character(train_data$date_account_created)
+train_data$date_first_booking <- ifelse(train_data$date_first_booking == "", train_data$date_account_created, train_data$date_first_booking)
+train_data$date_account_created <- as.Date(train_data$date_account_created)
+train_data$date_first_booking <- as.Date(train_data$date_first_booking)    
+
+summary(train_data$date_account_created)
+#Considering Month (We create a new column)
+train_data$month_first_book <- factor(format(train_data$month_first_book, format = "%B"), 
+                               levels = c("January", "February", "March", "April", 
+                                          "May", "June", "July", "August", "September",
+                                          "October", "November", "December"))
+summary(train_data$month_first_book)
+qplot(x =month_first_book, data = train_data)
+                            
+
+                            
 # 8. Signup_Method
 unique(train_data$signup_method)
 summary(train_data$signup_method)
