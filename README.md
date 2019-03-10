@@ -223,10 +223,7 @@ other and how this can be used to model and create more complex variables using 
 
 ## References
 
-<<<<<<< HEAD
-=======
-````
->>>>>>> 2f9fb2cd8b3320608f8d79475dc4b076d60771a6
+
 ●	An Introduction to Statistical Learning with Applications in R, 1st edition, 2015, Springer-Verlag, New York, 
     ISBN: 978-1-4614-7138-7 (ISL), Available for download at author’s website: http://www-bcf.usc.edu/~gareth/ISL/
     
